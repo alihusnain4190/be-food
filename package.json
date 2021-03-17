@@ -1,0 +1,29 @@
+{
+  "name": "be-food",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.js",
+    "setup-dbs": "psql -f ./db/setup.sql",
+    "migrate-make": "knex migrate:make"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alihusnain4190/be-food.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alihusnain4190/be-food/issues"
+  },
+  "homepage": "https://github.com/alihusnain4190/be-food#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "knex": "^0.95.2",
+    "nodemon": "^2.0.7",
+    "pg": "^8.5.1"
+  }
+}
