@@ -1,2 +1,3 @@
-// exports.familyImage = require("./familyImage");
-// exports.familyTask = require("./familyTask");
+exports.pizza = require("./pizza");
+exports.drinks = require("./drinks");
+exports.user = require("./user");
