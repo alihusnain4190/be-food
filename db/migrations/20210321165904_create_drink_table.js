@@ -3,7 +3,7 @@ exports.up = function (knex) {
   return knex.schema.createTable("drink", (pizza) => {
     pizza.increments("d_id").primary();
     pizza.string("d_name").notNullable();
-    pizza.string("d_price").notNullable();
+    pizza.string("d_pirce").notNullable();
   });
 };
 

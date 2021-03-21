@@ -7,6 +7,7 @@ exports.up = function (knex) {
     pizza.string("p_medium").notNullable();
     pizza.string("p_small").notNullable();
     pizza.string("dip").notNullable();
+        pizza.string("p_image").notNullable();
   });
 };
 
