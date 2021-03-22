@@ -8,7 +8,6 @@ const pizza = [
     p_larg: 15,
     p_small: 10,
     p_medium: 12,
-    topping: ["bacon", "cheese", "ham"],
     dip: "Garlic dip",
   },
   {
@@ -21,7 +20,6 @@ const pizza = [
     p_larg: 15,
     p_small: 10,
     p_medium: 12,
-    topping: ["black olives", "cheese", "green paper"],
     dip: "Garlic dip",
   },
   {
@@ -34,7 +32,6 @@ const pizza = [
     p_larg:15,
     p_small:10,
     p_medium:12,
-    topping: ["pepproni", "sweetcorn", "green paper"],
     dip: "Garlic dip",
   },
 ];

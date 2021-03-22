@@ -9,7 +9,7 @@ exports.seed = async (knex) => {
   const users = knex("user").insert(user);
   const data = await Promise.all([pizzas, drink, users]);
   try {
-    console.log(data);
+    // console.log(data);
   } catch (err) {
     console.log(err);
   }

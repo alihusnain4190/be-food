@@ -28,3 +28,15 @@ DELETE /api/drink/:id
 Patch  /api/drink/:id
 POST /api/drink 
 
+# Possible Errors
+
+## Relevant HTTP Status Codes
+200 OK
+201 Created
+204 No Content
+400 Bad Request
+404 Not Found
+405 Method Not Allowed
+418 I'm a teapot
+422 Unprocessable Entity
+500 Internal Server Error

@@ -14,7 +14,7 @@ exports.getPizzaControllerByID = async (req, res, next) => {
   const { id } = req.params;
   const pizzaById = await getPizzaModelByID(id);
   try {
-    res.status(200).send(pizzaById);
+    res.status(200).send(pizzaById[0]);
   } catch (err) {
     next(err);
   }
