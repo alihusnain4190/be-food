@@ -1,8 +1,13 @@
 const {
   getALLPizzaController,
   getPizzaControllerByID,
+  deletePizzaControllerByID,
 } = require("../controllers/Pizza/pizzaController");
+const { withErrorHandling } = require("../errors/index");
 const pizzaRouter = require("express").Router();
-pizzaRouter.get("/", getALLPizzaController);
-pizzaRouter.route("/:id").get(getPizzaControllerByID);
+pizzaRouter.get("/", withErrorHandling(getALLPizzaController));
+pizzaRouter
+  .route("/:id")
+  .get(withErrorHandling(getPizzaControllerByID))
+  .delete(withErrorHandling(deletePizzaControllerByID));
 module.exports = pizzaRouter;
