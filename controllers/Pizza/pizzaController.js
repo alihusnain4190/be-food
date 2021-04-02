@@ -2,6 +2,7 @@ const {
   getALLPizzaModel,
   deletePizzaModelByID,
   getPizzaModelByID,
+  addPizzaModel,
 } = require("../../models/Pizza/pizzaModel");
 exports.getALLPizzaController = async (req, res, next) => {
   const pizza = await getALLPizzaModel();
@@ -21,4 +22,10 @@ exports.deletePizzaControllerByID = async (req, res, next) => {
   const pizzaById = await deletePizzaModelByID(id);
 
   res.status(204).send();
+};
+exports.addPizzaController = async (req, res) => {
+  const data = req.body;
+  const pizza = await addPizzaModel(data);
+console.log(pizza)
+  res.status(201).send(pizza);
 };
