@@ -124,7 +124,7 @@ describe("/api", () => {
           .expect(400);
         expect(results.body.msg).toBe("Bad Request");
       });
-      test.only("Rturn 400 when key some is missing ", async () => {
+      test("Rturn 400 when key some is missing ", async () => {
         const data = {
           p_name: "ali",
 
@@ -141,6 +141,132 @@ describe("/api", () => {
           .send(data)
           .expect(400);
         expect(results.body.msg).toBe("Bad Request");
+      });
+      test("Return 400 when we send wrong datatypes", async () => {
+        const data = {
+          p_name: "ali",
+
+          p_larg: 15,
+
+          p_medium: 12,
+          p_small: 10,
+          dip: "Garlic dip",
+          p_images: "",
+        };
+
+        const result = await request(app)
+          .post("/api/pizza/")
+          .send(data)
+          .expect(400);
+        expect(result.body.msg).toBe("Bad Request");
+      });
+      test("Return 400 when we violate null", async () => {
+        const data = {
+          p_name: "ali",
+
+          p_larg: 15,
+
+          p_medium: null,
+          p_small: 10,
+          dip: "Garlic dip",
+          p_image: "",
+        };
+        const result = await request(app)
+          .post("/api/pizza")
+          .send(data)
+          .expect(400);
+
+        expect(result.body.msg).toBe("Bad Request");
+      });
+      //   test("Return 405 when methid is invalid",async ()=>{
+      //   //   const inValidMethod=['put','patch','delete'];
+      //   //   const
+      //   //   const result=await
+      //   // })
+    });
+    describe("PATCH", () => {
+      test("Return 201 when i update pizza name", async () => {
+        const result = await request(app)
+          .patch("/api/pizza/1")
+          .send({ p_name: "ali" })
+          .expect(201);
+        expect(result.body.p_name).toBe("ali");
+      });
+      test("Return 201 when i update pizza name", async () => {
+        const result = await request(app)
+          .patch("/api/pizza/1")
+          .send({ p_larg: "100" })
+          .expect(201);
+        expect(result.body.p_larg).toBe("100");
+      });
+      test("Return 201 when i update pizza all properties", async () => {
+        const data = {
+          p_name: "husnain",
+          p_larg: 100,
+          p_medium: 22,
+          p_small: 13,
+          dip: "herb dip",
+          p_image: "ali husnain",
+        };
+
+        const result = await request(app)
+          .patch("/api/pizza/1")
+          .send(data)
+          .expect(201);
+        expect(result.body).toEqual({
+          p_id: 1,
+          p_name: "husnain",
+          p_larg: "100",
+          p_medium: "22",
+          p_small: "13",
+          dip: "herb dip",
+          p_image: "ali husnain",
+        });
+      });
+      test("Return 400 when pizza id is invalid", async () => {
+        const data = {
+          p_name: "ali",
+
+          p_larg: 15,
+
+          p_medium: 12,
+          p_small: 10,
+          dip: "Garlic dip",
+          p_image: "",
+        };
+        const result = await request(app)
+          .patch("/api/pizza/one")
+          .send(data)
+          .expect(400);
+
+        expect(result.body.msg).toBe("Bad Request");
+      });
+      test("Return 400 when pizza send data without body", async () => {
+        const data = {};
+        const result = await request(app)
+          .patch("/api/pizza/100")
+          .send(data)
+          .expect(400);
+
+        expect(result.body.msg).toBe("Bad Request");
+      });
+      test("Return 404 when pizza id non existing ID", async () => {
+        const data = {
+          p_name: "ali",
+
+          p_larg: 15,
+
+          p_medium: 12,
+          p_small: 10,
+          dip: "Garlic dip",
+          p_image: "",
+        };
+        const result = await request(app)
+          .patch("/api/pizza/100")
+          .send(data)
+          .expect(404);
+
+        expect(result.body.msg).toBe("Invalid id");
       });
     });
   });

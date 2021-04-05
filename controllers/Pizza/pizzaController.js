@@ -3,6 +3,7 @@ const {
   deletePizzaModelByID,
   getPizzaModelByID,
   addPizzaModel,
+  updatePizzaModelByID,
 } = require("../../models/Pizza/pizzaModel");
 exports.getALLPizzaController = async (req, res, next) => {
   const pizza = await getALLPizzaModel();
@@ -25,7 +26,14 @@ exports.deletePizzaControllerByID = async (req, res, next) => {
 };
 exports.addPizzaController = async (req, res) => {
   const data = req.body;
+
   const pizza = await addPizzaModel(data);
-console.log(pizza)
+
   res.status(201).send(pizza);
+};
+
+exports.updatePizzaControllerByID = async (req, res) => {
+  const { body } = req;
+  const pizz = await updatePizzaModelByID(body, req.params);
+  res.status(201).send(pizz);
 };
