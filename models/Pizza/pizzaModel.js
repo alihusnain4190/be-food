@@ -34,20 +34,17 @@ exports.updatePizzaModelByID = async (
   { p_name, p_larg, p_medium, p_small, dip, p_image },
   { id }
 ) => {
-  if(p_name||p_larg||p_medium||p_small||dip||p_image){
- const result = await connection("pizza")
-    .update({ p_name, p_larg, p_medium, p_small, dip,p_image })
-    .where({ p_id: id })
-    .returning("*");
-    console.log(result);
-     if (result.length===0) {
-    return Promise.reject({ status: 404, msg: "Invalid id" });
+  if (p_name || p_larg || p_medium || p_small || dip || p_image) {
+    const result = await connection("pizza")
+      .update({ p_name, p_larg, p_medium, p_small, dip, p_image })
+      .where({ p_id: id })
+      .returning("*");
+    if (result.length === 0) {
+      return Promise.reject({ status: 404, msg: "Invalid id" });
+    } else {
+      return result[0];
+    }
   } else {
-    return result[0];
+    return Promise.reject({ status: 400, msg: "Bad Request" });
   }
-  }else{
-  return Promise.reject({ status: 400, msg: "Bad Request" });
-  }
-  
- 
 };

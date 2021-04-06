@@ -1,12 +1,19 @@
 exports.withErrorHandling = (controller) => {
   return async (req, res, next) => {
+
     try {
+
       await controller(req, res);
     } catch (err) {
       console.log(err);
       next(err);
     }
   };
+};
+exports.methodNotAllowed = (req, res, next) => {
+  console.log('not allowed');
+  res.status(405).send({ msg: "Method Not Allowed" });
+  next();
 };
 exports.handleErrorSQL = (err, req, res, next) => {
   const errCode = ["22P02", "23502", "42703","42P01"];

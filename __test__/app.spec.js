@@ -12,7 +12,41 @@ afterAll(() => {
 });
 describe("/api", () => {
   describe("/pizza", () => {
+    describe("Invalid method for data which you get by id",()=>{
+      
+  test.only("Return status 405 when we passed invalid method", async () => {
+      const invalidMethod = ["put", ];
+      const methodPromise = invalidMethod.map((m) => {
+        return request(app)
+          [m]("/api/pizza/12")
+          .expect(405)
+          .then(({ body: { msg } }) => {
+          expect(msg).toEqual('Method Not Allowed');
+          });
+        });
+      return Promise.all(methodPromise)
+    });
+  
+    })
     describe("GET", () => {
+        test("Return status 405 when we passed invalid method", async () => {
+      const invalidMethod = ["put", "delete", "patch"];
+      const methodPromise = invalidMethod.map((m) => {
+        return request(app)
+          [m]("/api/pizza")
+          .expect(405)
+          .then(({ body: { msg } }) => {
+          expect(msg).toEqual('Method Not Allowed');
+          });
+        });
+
+      return Promise.all(methodPromise)
+      // const { body } = await request(app)
+      //     .put('/api/pizza')
+      //     .expect(405);
+      //   expect(body.msg).toEqual('Method Not Allowed');
+    });
+
       test("Return status 200 with array of all pizza list", async () => {
         const pizza = await request(app).get("/api/pizza").expect(200);
         expect(Array.isArray(pizza.body)).toBe(true);
