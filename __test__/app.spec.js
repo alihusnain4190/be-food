@@ -1,6 +1,5 @@
 // process.env.NODE_ENV = "test";
 const request = require("supertest");
-const { result } = require("underscore");
 const app = require("../app");
 const connection = require("../db/connection");
 beforeEach(() => {
@@ -14,7 +13,7 @@ describe("/api", () => {
   describe("/pizza", () => {
     describe("Invalid method for data which you get by id",()=>{
       
-  test.only("Return status 405 when we passed invalid method", async () => {
+  test("Return status 405 when we passed invalid method", async () => {
       const invalidMethod = ["put", ];
       const methodPromise = invalidMethod.map((m) => {
         return request(app)
@@ -304,4 +303,10 @@ describe("/api", () => {
       });
     });
   });
+  describe("/drinks",()=>{
+    test.only("Status 200 with response with all drinks",async()=>{
+      const result=request(app).get("/api/drink").expect(200);
+       expect(Array.isArray(result.body)).toBe(true);
+    })
+  })
 });

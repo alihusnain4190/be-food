@@ -1,6 +1,8 @@
 const pizzaRouter = require("./pizza-router");
+const drinkRouter = require("./drink-router");
 const apiRouter = require("express").Router();
 apiRouter.use("/pizza", pizzaRouter);
+apiRouter.use("/drink", drinkRouter);
 apiRouter
   .route("/")
   .get((req, res) => {
