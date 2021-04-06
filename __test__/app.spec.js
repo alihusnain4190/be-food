@@ -11,40 +11,38 @@ afterAll(() => {
 });
 describe("/api", () => {
   describe("/pizza", () => {
-    describe("Invalid method for data which you get by id",()=>{
-      
-  test("Return status 405 when we passed invalid method", async () => {
-      const invalidMethod = ["put", ];
-      const methodPromise = invalidMethod.map((m) => {
-        return request(app)
-          [m]("/api/pizza/12")
-          .expect(405)
-          .then(({ body: { msg } }) => {
-          expect(msg).toEqual('Method Not Allowed');
-          });
+    describe("Invalid method for data which you get by id", () => {
+      test("Return status 405 when we passed invalid method", async () => {
+        const invalidMethod = ["put"];
+        const methodPromise = invalidMethod.map((m) => {
+          return request(app)
+            [m]("/api/pizza/12")
+            .expect(405)
+            .then(({ body: { msg } }) => {
+              expect(msg).toEqual("Method Not Allowed");
+            });
         });
-      return Promise.all(methodPromise)
+        return Promise.all(methodPromise);
+      });
     });
-  
-    })
     describe("GET", () => {
-        test("Return status 405 when we passed invalid method", async () => {
-      const invalidMethod = ["put", "delete", "patch"];
-      const methodPromise = invalidMethod.map((m) => {
-        return request(app)
-          [m]("/api/pizza")
-          .expect(405)
-          .then(({ body: { msg } }) => {
-          expect(msg).toEqual('Method Not Allowed');
-          });
+      test("Return status 405 when we passed invalid method", async () => {
+        const invalidMethod = ["put", "delete", "patch"];
+        const methodPromise = invalidMethod.map((m) => {
+          return request(app)
+            [m]("/api/pizza")
+            .expect(405)
+            .then(({ body: { msg } }) => {
+              expect(msg).toEqual("Method Not Allowed");
+            });
         });
 
-      return Promise.all(methodPromise)
-      // const { body } = await request(app)
-      //     .put('/api/pizza')
-      //     .expect(405);
-      //   expect(body.msg).toEqual('Method Not Allowed');
-    });
+        return Promise.all(methodPromise);
+        // const { body } = await request(app)
+        //     .put('/api/pizza')
+        //     .expect(405);
+        //   expect(body.msg).toEqual('Method Not Allowed');
+      });
 
       test("Return status 200 with array of all pizza list", async () => {
         const pizza = await request(app).get("/api/pizza").expect(200);
@@ -303,10 +301,67 @@ describe("/api", () => {
       });
     });
   });
-  describe("/drinks",()=>{
-    test.only("Status 200 with response with all drinks",async()=>{
-      const result=request(app).get("/api/drink").expect(200);
-       expect(Array.isArray(result.body)).toBe(true);
-    })
-  })
+  describe("/drinks", () => {
+    test("Status 200 with response with all drinks", async () => {
+      const result = await request(app).get("/api/drink").expect(200);
+
+      expect(Array.isArray(result.body)).toBe(true);
+      expect(result.body.length).toBe(3);
+      expect(Object.keys(result.body[0])).toEqual(
+        expect.arrayContaining(["d_id", "d_name", "d_pirce"])
+      );
+    });
+    describe("POST", () => {
+      test("return status 201 with response of object", async () => {
+        const data = { d_name: "ali", d_pirce: "1.2" };
+        const result = await request(app)
+          .post("/api/drink")
+          .send(data)
+          .expect(201);
+        expect(Object.keys(result.body)).toEqual(
+          expect.arrayContaining(["d_id", "d_name", "d_pirce"])
+        );
+      });
+      test("Return status 400 when we send empty data", async () => {
+        const data = {};
+        const result = await request(app)
+          .post("/api/drink")
+          .send(data)
+          .expect(400);
+        expect(result.body.msg).toBe("Bad Request");
+      });
+      test("Return 400 when we send data with missing key", async () => {
+        const data = { d_name: "ali", d_pirc: "1.2" };
+
+        const result = await request(app)
+          .post("/api/drink")
+          .send(data)
+          .expect(400);
+        expect(result.body.msg).toBe("Bad Request");
+      });
+      test("Return 400 when we send data with wrong key", async () => {
+        const data = { d_name: "ali", d_pirce: "1.2", d_image: "aliasd" };
+
+        const result = await request(app)
+          .post("/api/drink")
+          .send(data)
+          .expect(400);
+        expect(result.body.msg).toBe("Bad Request");
+      });
+      test("Return 400 with null constraints", async () => {
+        const data = { d_name: "ali", d_pirce: "null", d_image: "aliasd" };
+
+        const result = await request(app)
+          .post("/api/drink")
+          .send(data)
+          .expect(400);
+        expect(result.body.msg).toBe("Bad Request");
+      });
+    });
+    describe("DELETE", () => {
+      test.only("status 201 when we delte drink by id", async () => {
+        const result = await request(app).delete("/api/drink/1").expect(201);
+      });
+    });
+  });
 });
