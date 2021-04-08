@@ -302,6 +302,9 @@ describe("/api", () => {
     });
   });
   describe("/drinks", () => {
+    // test.only("Invalid Method for drink",async()=>{
+    //   const invalidMethod=['']
+    // })
     test("Status 200 with response with all drinks", async () => {
       const result = await request(app).get("/api/drink").expect(200);
 
@@ -359,8 +362,135 @@ describe("/api", () => {
       });
     });
     describe("DELETE", () => {
-      test.only("status 201 when we delte drink by id", async () => {
+      test("status 201 when we delte drink by id", async () => {
         const result = await request(app).delete("/api/drink/1").expect(201);
+      });
+      test("Status 404 when passed non Existing ID", async () => {
+        const result = await request(app).delete("/api/drink/999").expect(404);
+        expect(result.body.msg).toBe("Bad Request");
+      });
+      test("Status 400 when pass invlaid id ", async () => {
+        const result = await request(app).delete("/api/drink/abs").expect(400);
+        expect(result.body.msg).toBe("Bad Request");
+      });
+    });
+    describe("Update", () => {
+      test("Status 201 resonse with object with new price", async () => {
+        const data = { d_name: "coke", d_pirce: "2" };
+        const result = await request(app)
+          .patch("/api/drink/1")
+          .send(data)
+          .expect(201);
+        expect(Object.keys(result.body)).toEqual(
+          expect.arrayContaining(["d_id", "d_name", "d_pirce"])
+        );
+        expect(result.body.d_pirce).toBe("2");
+      });
+      test("Status 201 resonse with object with new price", async () => {
+        const data = { d_name: "lemon", d_pirce: "2" };
+        const result = await request(app)
+          .patch("/api/drink/1")
+          .send(data)
+          .expect(201);
+        expect(Object.keys(result.body)).toEqual(
+          expect.arrayContaining(["d_id", "d_name", "d_pirce"])
+        );
+        expect(result.body.d_name).toBe("lemon");
+      });
+      test("Status 404 when we passed invalid id", async () => {
+        const data = { d_name: "lemon", d_pirce: "2" };
+        const result = await request(app)
+          .patch("/api/drink/999")
+          .send(data)
+          .expect(404);
+
+        expect(result.body.msg).toBe("Item Not Found");
+      });
+      test("Status 400 when we passed non existing iD", async () => {
+        const data = { d_name: "lemon", d_pirce: "2" };
+        const result = await request(app)
+          .patch("/api/drink/asd")
+          .send(data)
+          .expect(400);
+
+        expect(result.body.msg).toBe("Bad Request");
+      });
+    });
+  });
+  describe("/user", () => {
+    describe("GET", () => {
+      test("Return status 200 with response array of user object", async () => {
+        const result = await request(app).get("/api/user").expect(200);
+        expect(Array.isArray(result.body)).toBe(true);
+        expect(result.body.length).toBe(2);
+        expect(Object.keys(result.body[0])).toEqual(
+          expect.arrayContaining(["u_id", "u_name", "u_email"])
+        );
+      });
+      describe("POST", () => {
+        test("Return status 201 with reponse of data ", async () => {
+          const data = { u_name: "ch", u_email: "husnain@gmail.com" };
+          const result = await request(app)
+            .post("/api/user")
+            .send(data)
+            .expect(201);
+          expect(Object.keys(result.body)).toEqual(
+            expect.arrayContaining(["u_id", "u_name", "u_email"])
+          );
+          expect(result.body.u_name).toBe("ch");
+        });
+        test("Return status 400 when we violate null constraint", async () => {
+          const data = { u_name: null, u_email: "husnain@gmail.com" };
+          const result = await request(app)
+            .post("/api/user")
+            .send(data)
+            .expect(400);
+          expect(result.body.msg).toBe("Bad Request");
+        });
+        test("Return status 400 when we passed wrong datatype", async () => {
+          const data = { u_name: "ch", u_emails: "husnain@gmail.com" };
+          const result = await request(app)
+            .post("/api/user")
+            .send(data)
+            .expect(400);
+          expect(result.body.msg).toBe("Bad Request");
+        });
+        test("Return status 400 when send missing body", async () => {
+          const data = {};
+          const result = await request(app)
+            .post("/api/user")
+            .send(data)
+            .expect(400);
+          expect(result.body.msg).toBe("Bad Request");
+        });
+        test("Return status 400 when send email is missing", async () => {
+          const data = { u_name: "ch", u_emails: "" };
+          const result = await request(app)
+            .post("/api/user")
+            .send(data)
+            .expect(400);
+          expect(result.body.msg).toBe("Bad Request");
+        });
+        test("Return status 400 when send email is missing", async () => {
+          const data = { u_name: "", u_emails: "ali@gmail.com" };
+          const result = await request(app)
+            .post("/api/user")
+            .send(data)
+            .expect(400);
+          expect(result.body.msg).toBe("Bad Request");
+        });
+        test.only("Return status 400 when send invlid properties", async () => {
+          const data = {
+            u_name: "",
+            u_emails: "ali@gmail.com",
+            u_password: "asd",
+          };
+          const result = await request(app)
+            .post("/api/user")
+            .send(data)
+            .expect(400);
+          expect(result.body.msg).toBe("Bad Request");
+        });
       });
     });
   });

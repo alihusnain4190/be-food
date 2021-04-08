@@ -14,8 +14,6 @@ pizzaRouter
   .post(withErrorHandling(addPizzaController))
   .all(methodNotAllowed);
 
-// pizzaRouter.post("/", withErrorHandling(addPizzaController));
-// .all(methodNotAllowed);
 pizzaRouter
   .route("/:id")
   .get(withErrorHandling(getPizzaControllerByID))
