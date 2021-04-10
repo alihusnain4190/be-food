@@ -479,7 +479,7 @@ describe("/api", () => {
             .expect(400);
           expect(result.body.msg).toBe("Bad Request");
         });
-        test.only("Return status 400 when send invlid properties", async () => {
+        test("Return status 400 when send invlid properties", async () => {
           const data = {
             u_name: "",
             u_emails: "ali@gmail.com",
@@ -490,6 +490,57 @@ describe("/api", () => {
             .send(data)
             .expect(400);
           expect(result.body.msg).toBe("Bad Request");
+        });
+      });
+      describe("Update", () => {
+        test("Return status 201 response with objcet of updated", async () => {
+          const data = {
+            u_name: "alihusnain",
+          };
+          const result = await request(app)
+            .patch("/api/user/1")
+            .send(data)
+            .expect(201);
+          expect(result.body.u_name).toBe("alihusnain");
+        });
+        test("Return status 201 response with objcet of updated", async () => {
+          const data = {
+            u_email: "husnain@gmail.com",
+          };
+          const result = await request(app)
+            .patch("/api/user/1")
+            .send(data)
+            .expect(201);
+          expect(result.body.u_email).toBe("husnain@gmail.com");
+        });
+        test("Status 400 When we passs empty body", async () => {
+          const result = await request(app)
+            .patch("/api/user/1")
+            .send({})
+            .expect(400);
+          expect(result.body.msg).toBe("Bad Request");
+        });
+        test("Status 400 When we violate null constraint", async () => {
+          const result = await request(app)
+            .patch("/api/user/1")
+            .send({ u_name: null })
+            .expect(400);
+          expect(result.body.msg).toBe("Bad Request");
+        });
+        test("Status 400 with invalid id", async () => {
+          const result = await request(app)
+            .patch("/api/user/abs")
+            .send({ u_name: null })
+            .expect(400);
+          expect(result.body.msg).toBe("Bad Request");
+        });
+        test.only("Status 404 with not existing id", async () => {
+          const result = await request(app)
+            .patch("/api/user/100")
+            .send({ u_name: "alihusnain" })
+            .expect(404);
+            
+          expect(result.body.msg).toBe("Invalid id");
         });
       });
     });
