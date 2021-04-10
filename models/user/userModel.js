@@ -23,3 +23,8 @@ exports.updateUserModel = async ({ id }, { u_name, u_email }) => {
     return Promise.reject({ status: 400, msg: "Bad Request" });
   }
 };
+exports.deleteUserModelByID = async (id) => {
+  const user = await connection("user").where({ u_id: id }).del().returning("*");
+  if(user.length===0)return Promise.reject({status:404,msg:"Invalid id"})
+  return user;
+};

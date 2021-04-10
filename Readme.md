@@ -2,15 +2,14 @@
 
 # Background
 
-I am going to build a API for my food app.Which i will use in my front end app.I am following MVC pattren for this app.
+I am going to build an API for my food app.Which i will use in my front end app.I am following MVC pattren for this app.
 
-For database i am using POSTtgresQL and using Knex query builder http://knexjs.org/
-
+For database i am using POSTtgresQL and for sql i used Knex query builder http://knexjs.org/
 ---
 
 # Tools and tech
 
-i am using Node Express framework, JEST,Knex,POSTgresQL.
+i am using Node Express framework, JEST ,supertest , Knex, POSTgresQL, axios.
 
 ---
 
@@ -35,6 +34,16 @@ DELETE /api/drink/:id
 Patch /api/drink/:id
 POST /api/drink
 
+## drinks
+
+GET /api/user
+
+
+DELETE /api/user/:id
+Patch /api/user/:id
+POST /api/user
+
+
 # Possible Errors
 
 ## Relevant HTTP Status Codes
@@ -49,34 +58,5 @@ POST /api/drink
 422 Unprocessable Entity
 500 Internal Server Error
 
-# total test case with test
-
-## simple GET
-
-#### happy path
-
-check return array or not
-expect(Array.isArray(result.body)).toBe(true);
-check total length
-expect(result.body.length).toBe(3);
-check you can keys
-expect(Object.keys(categories[0])).toEqual(
-expect.arrayContaining(["slug", "description"])
-);
-
-## POST
-
-### send data happy test
-
-check all propert which are returning from database after insert data
-expect(
-Object.keys(result.body)).toEqual(
-expect.arrayContaining(["d_id", "d_name", "d_pirce"])
-)
-##### Sad path for post 
-SEND EMPTY BODY
-send wrong data type
-send more which is not existing in table
-violate null constraint 
 
 

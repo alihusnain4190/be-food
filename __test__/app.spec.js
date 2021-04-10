@@ -9,7 +9,7 @@ beforeEach(() => {
 afterAll(() => {
   return connection.destroy();
 });
-describe("/api", () => {
+describe.only("/api", () => {
   describe("/pizza", () => {
     describe("Invalid method for data which you get by id", () => {
       test("Return status 405 when we passed invalid method", async () => {
@@ -302,9 +302,35 @@ describe("/api", () => {
     });
   });
   describe("/drinks", () => {
-    // test.only("Invalid Method for drink",async()=>{
-    //   const invalidMethod=['']
-    // })
+      describe("Invalid method ", () => {
+      test("Return status 405 when we passed invalid method", async () => {
+        const invalidMethod = ["put"];
+        const methodPromise = invalidMethod.map((m) => {
+          return request(app)
+            [m]("/api/drink/12")
+            .expect(405)
+            .then(({ body: { msg } }) => {
+              expect(msg).toEqual("Method Not Allowed");
+            });
+        });
+        return Promise.all(methodPromise);
+      });
+    });
+    test("Return status 405 when we passed invalid method", async () => {
+      const invalidMethod = ["put", "delete", "patch"];
+      const methodPromise = invalidMethod.map((m) => {
+        return request(app)
+          [m]("/api/drink")
+          .expect(405)
+          .then(({ body: { msg } }) => {
+            // console.log(msg);
+            expect(msg).toEqual("Method Not Allowed");
+          });
+      });
+
+      return Promise.all(methodPromise);
+    });
+  
     test("Status 200 with response with all drinks", async () => {
       const result = await request(app).get("/api/drink").expect(200);
 
@@ -418,6 +444,34 @@ describe("/api", () => {
     });
   });
   describe("/user", () => {
+     describe("Invalid method ", () => {
+      test("Return status 405 when we passed invalid method", async () => {
+        const invalidMethod = ["put"];
+        const methodPromise = invalidMethod.map((m) => {
+          return request(app)
+            [m]("/api/user/12")
+            .expect(405)
+            .then(({ body: { msg } }) => {
+              expect(msg).toEqual("Method Not Allowed");
+            });
+        });
+        return Promise.all(methodPromise);
+      });
+    });
+    test("Return status 405 when we passed invalid method", async () => {
+      const invalidMethod = ["put", "delete", "patch"];
+      const methodPromise = invalidMethod.map((m) => {
+        return request(app)
+          [m]("/api/user")
+          .expect(405)
+          .then(({ body: { msg } }) => {
+            // console.log(msg);
+            expect(msg).toEqual("Method Not Allowed");
+          });
+      });
+
+      return Promise.all(methodPromise);
+    });
     describe("GET", () => {
       test("Return status 200 with response array of user object", async () => {
         const result = await request(app).get("/api/user").expect(200);
@@ -427,121 +481,134 @@ describe("/api", () => {
           expect.arrayContaining(["u_id", "u_name", "u_email"])
         );
       });
-      describe("POST", () => {
-        test("Return status 201 with reponse of data ", async () => {
-          const data = { u_name: "ch", u_email: "husnain@gmail.com" };
-          const result = await request(app)
-            .post("/api/user")
-            .send(data)
-            .expect(201);
-          expect(Object.keys(result.body)).toEqual(
-            expect.arrayContaining(["u_id", "u_name", "u_email"])
-          );
-          expect(result.body.u_name).toBe("ch");
-        });
-        test("Return status 400 when we violate null constraint", async () => {
-          const data = { u_name: null, u_email: "husnain@gmail.com" };
-          const result = await request(app)
-            .post("/api/user")
-            .send(data)
-            .expect(400);
-          expect(result.body.msg).toBe("Bad Request");
-        });
-        test("Return status 400 when we passed wrong datatype", async () => {
-          const data = { u_name: "ch", u_emails: "husnain@gmail.com" };
-          const result = await request(app)
-            .post("/api/user")
-            .send(data)
-            .expect(400);
-          expect(result.body.msg).toBe("Bad Request");
-        });
-        test("Return status 400 when send missing body", async () => {
-          const data = {};
-          const result = await request(app)
-            .post("/api/user")
-            .send(data)
-            .expect(400);
-          expect(result.body.msg).toBe("Bad Request");
-        });
-        test("Return status 400 when send email is missing", async () => {
-          const data = { u_name: "ch", u_emails: "" };
-          const result = await request(app)
-            .post("/api/user")
-            .send(data)
-            .expect(400);
-          expect(result.body.msg).toBe("Bad Request");
-        });
-        test("Return status 400 when send email is missing", async () => {
-          const data = { u_name: "", u_emails: "ali@gmail.com" };
-          const result = await request(app)
-            .post("/api/user")
-            .send(data)
-            .expect(400);
-          expect(result.body.msg).toBe("Bad Request");
-        });
-        test("Return status 400 when send invlid properties", async () => {
-          const data = {
-            u_name: "",
-            u_emails: "ali@gmail.com",
-            u_password: "asd",
-          };
-          const result = await request(app)
-            .post("/api/user")
-            .send(data)
-            .expect(400);
-          expect(result.body.msg).toBe("Bad Request");
-        });
+    });
+    describe("POST", () => {
+      test("Return status 201 with reponse of data ", async () => {
+        const data = { u_name: "ch", u_email: "husnain@gmail.com" };
+        const result = await request(app)
+          .post("/api/user")
+          .send(data)
+          .expect(201);
+        expect(Object.keys(result.body)).toEqual(
+          expect.arrayContaining(["u_id", "u_name", "u_email"])
+        );
+        expect(result.body.u_name).toBe("ch");
       });
-      describe("Update", () => {
-        test("Return status 201 response with objcet of updated", async () => {
-          const data = {
-            u_name: "alihusnain",
-          };
-          const result = await request(app)
-            .patch("/api/user/1")
-            .send(data)
-            .expect(201);
-          expect(result.body.u_name).toBe("alihusnain");
-        });
-        test("Return status 201 response with objcet of updated", async () => {
-          const data = {
-            u_email: "husnain@gmail.com",
-          };
-          const result = await request(app)
-            .patch("/api/user/1")
-            .send(data)
-            .expect(201);
-          expect(result.body.u_email).toBe("husnain@gmail.com");
-        });
-        test("Status 400 When we passs empty body", async () => {
-          const result = await request(app)
-            .patch("/api/user/1")
-            .send({})
-            .expect(400);
-          expect(result.body.msg).toBe("Bad Request");
-        });
-        test("Status 400 When we violate null constraint", async () => {
-          const result = await request(app)
-            .patch("/api/user/1")
-            .send({ u_name: null })
-            .expect(400);
-          expect(result.body.msg).toBe("Bad Request");
-        });
-        test("Status 400 with invalid id", async () => {
-          const result = await request(app)
-            .patch("/api/user/abs")
-            .send({ u_name: null })
-            .expect(400);
-          expect(result.body.msg).toBe("Bad Request");
-        });
-        test.only("Status 404 with not existing id", async () => {
-          const result = await request(app)
-            .patch("/api/user/100")
-            .send({ u_name: "alihusnain" })
-            .expect(404);
-            
-          expect(result.body.msg).toBe("Invalid id");
-        });
+      test("Return status 400 when we violate null constraint", async () => {
+        const data = { u_name: null, u_email: "husnain@gmail.com" };
+        const result = await request(app)
+          .post("/api/user")
+          .send(data)
+          .expect(400);
+        expect(result.body.msg).toBe("Bad Request");
+      });
+      test("Return status 400 when we passed wrong datatype", async () => {
+        const data = { u_name: "ch", u_emails: "husnain@gmail.com" };
+        const result = await request(app)
+          .post("/api/user")
+          .send(data)
+          .expect(400);
+        expect(result.body.msg).toBe("Bad Request");
+      });
+      test("Return status 400 when send missing body", async () => {
+        const data = {};
+        const result = await request(app)
+          .post("/api/user")
+          .send(data)
+          .expect(400);
+        expect(result.body.msg).toBe("Bad Request");
+      });
+      test("Return status 400 when send email is missing", async () => {
+        const data = { u_name: "ch", u_emails: "" };
+        const result = await request(app)
+          .post("/api/user")
+          .send(data)
+          .expect(400);
+        expect(result.body.msg).toBe("Bad Request");
+      });
+      test("Return status 400 when send email is missing", async () => {
+        const data = { u_name: "", u_emails: "ali@gmail.com" };
+        const result = await request(app)
+          .post("/api/user")
+          .send(data)
+          .expect(400);
+        expect(result.body.msg).toBe("Bad Request");
+      });
+      test("Return status 400 when send invlid properties", async () => {
+        const data = {
+          u_name: "",
+          u_emails: "ali@gmail.com",
+          u_password: "asd",
+        };
+        const result = await request(app)
+          .post("/api/user")
+          .send(data)
+          .expect(400);
+        expect(result.body.msg).toBe("Bad Request");
+      });
+    });
+    describe("Update", () => {
+      test("Return status 201 response with objcet of updated", async () => {
+        const data = {
+          u_name: "alihusnain",
+        };
+        const result = await request(app)
+          .patch("/api/user/1")
+          .send(data)
+          .expect(201);
+        expect(result.body.u_name).toBe("alihusnain");
+      });
+      test("Return status 201 response with objcet of updated", async () => {
+        const data = {
+          u_email: "husnain@gmail.com",
+        };
+        const result = await request(app)
+          .patch("/api/user/1")
+          .send(data)
+          .expect(201);
+        expect(result.body.u_email).toBe("husnain@gmail.com");
+      });
+      test("Status 400 When we passs empty body", async () => {
+        const result = await request(app)
+          .patch("/api/user/1")
+          .send({})
+          .expect(400);
+        expect(result.body.msg).toBe("Bad Request");
+      });
+      test("Status 400 When we violate null constraint", async () => {
+        const result = await request(app)
+          .patch("/api/user/1")
+          .send({ u_name: null })
+          .expect(400);
+        expect(result.body.msg).toBe("Bad Request");
+      });
+      test("Status 400 with invalid id", async () => {
+        const result = await request(app)
+          .patch("/api/user/abs")
+          .send({ u_name: null })
+          .expect(400);
+        expect(result.body.msg).toBe("Bad Request");
+      });
+      test("Status 404 with not existing id", async () => {
+        const result = await request(app)
+          .patch("/api/user/100")
+          .send({ u_name: "alihusnain" })
+          .expect(404);
+
+        expect(result.body.msg).toBe("Invalid id");
+      });
+    });
+    describe("DELETE", () => {
+      test("STATUS 204", async () => {
+        const result = await request(app).delete("/api/user/1").expect(204);
+      });
+      test("Status 404 when passed non Existing ID", async () => {
+        const result = await request(app).delete("/api/user/999").expect(404);
+        expect(result.body.msg).toBe("Invalid id");
+      });
+      test("Status 400 when pass invlaid id ", async () => {
+        const result = await request(app).delete("/api/user/abs").expect(400);
+        expect(result.body.msg).toBe("Bad Request");
       });
     });
   });

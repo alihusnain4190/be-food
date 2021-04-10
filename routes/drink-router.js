@@ -10,9 +10,11 @@ const { withErrorHandling, methodNotAllowed } = require("../errors/index");
 drinkRouter
   .route("/")
   .get(withErrorHandling(getAllDrinkController))
-  .post(withErrorHandling(addDrinkController));
+  .post(withErrorHandling(addDrinkController))
+  .all(methodNotAllowed);
 drinkRouter
   .route("/:id")
   .delete(withErrorHandling(deleteDrinkControllerByID))
-  .patch(withErrorHandling(ptachDrinkControllerByID));
+  .patch(withErrorHandling(ptachDrinkControllerByID))
+  .all(methodNotAllowed);
 module.exports = drinkRouter;
