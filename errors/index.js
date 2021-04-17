@@ -23,6 +23,7 @@ exports.handleErrorSQL = (err, req, res, next) => {
   next(err);
 };
 exports.handleCustomErrors = (err, req, res, next) => {
-  if (err.status) res.status(err.status).send({ msg: err.msg });
-  next(err);
+  // if (err.statusCode === 402) res.status(402);
+  // if (err.status) res.status(err.status).send({ msg: err.msg });
+  // else next(err);
 };

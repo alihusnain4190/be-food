@@ -6,7 +6,6 @@ const {
   updatePizzaControllerByID,
 } = require("../controllers/Pizza/pizzaController");
 const { withErrorHandling, methodNotAllowed } = require("../errors/index");
-// console.log(methodNotAllowed());
 const pizzaRouter = require("express").Router();
 pizzaRouter
   .route("/")

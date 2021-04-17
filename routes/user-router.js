@@ -6,7 +6,7 @@ const {
   deleteUserControllerByID,
 } = require("../controllers/user/userController");
 const { withErrorHandling, methodNotAllowed } = require("../errors/index");
-// console.log(methodNotAllowed())
+
 userRouter
   .route("/")
   .get(withErrorHandling(fetchAllUserController))

@@ -45,6 +45,7 @@
     "multiparty": "^4.2.2",
     "nodemon": "^2.0.6",
     "pg": "^8.5.1",
+    "stripe": "^8.144.0",
     "underscore": "^1.11.0"
   },
   "devDependencies": {
