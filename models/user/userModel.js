@@ -5,6 +5,7 @@ exports.fetchAllUserModel = async () => {
 };
 
 exports.addUserModel = async (data) => {
+  console.log(data);
   const user = await connection("user").insert(data).returning("*");
   return user[0];
 };

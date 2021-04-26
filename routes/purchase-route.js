@@ -1,11 +1,13 @@
 const {
   purchaseController,
+  getPurcaseController,
 } = require("../controllers/purchase/purchaseController");
 
 const { withErrorHandling, methodNotAllowed } = require("../errors/index");
 const purchaseRoter = require("express").Router();
-purchaseRoter.route("/").post((purchaseController));
-// purchaseRoter.post=(req,res)=>{
-//   console.log('ali')
-// }
+purchaseRoter
+  .route("/")
+  .get(withErrorHandling(getPurcaseController))
+  .post(withErrorHandling(purchaseController))
+  .all(methodNotAllowed);
 module.exports = purchaseRoter;
