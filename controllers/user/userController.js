@@ -6,7 +6,8 @@ const {
   deleteUserModelByID,
 } = require("../../models/user/userModel");
 exports.fetchAllUserController = async (req, res) => {
-  const user = await fetchAllUserModel();
+  const { email } = req.query;
+  const user = await fetchAllUserModel(email);
   res.status(200).send(user);
 };
 exports.addUserController = async (req, res) => {
@@ -27,4 +28,9 @@ exports.deleteUserControllerByID = async (req, res) => {
 
   const user = await deleteUserModelByID(id);
   res.status(204).send();
+};
+exports.getUserByEmail = (req, res) => {
+  console.log(req.body);
+  console.log(req.params);
+  console.log("controller user email");
 };
