@@ -20,7 +20,7 @@ exports.purchaseController = async (req, res) => {
       confirm: true,
     });
     const result = await purchaseModel(user, address, amount, postcode);
-CostExplorer.log(result);
+    console.log(result)
     res.status(200).send({ confirm: "success" });
   } catch (err) {
     console.log(err);
@@ -28,6 +28,6 @@ CostExplorer.log(result);
   }
 };
 exports.getPurcaseController = async (req, res) => {
-  const data =await getPurcaseModel();
+  const data = await getPurcaseModel();
   res.status(200).send(data);
 };
