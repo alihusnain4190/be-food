@@ -10,7 +10,7 @@ const {
 } = require("../../models/purchase/purchaseModel");
 exports.purchaseController = async (req, res) => {
   const { id, user, amount, address, postcode } = req.body;
-
+  console.log(`${id}  user ${user} amount ${amount} address ${address} postcode ${postcode}`)
   try {
     const payment = await stripe.paymentIntents.create({
       amount,
